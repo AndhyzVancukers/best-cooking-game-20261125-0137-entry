@@ -1,0 +1,230 @@
+/* Dapur Kilat — Warung Rush. Palet dapur hangat: krem, terakota, kayu, hijau daun. */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+  background: #2b1d12;
+  color: #3a2415;
+  overflow-x: hidden;
+}
+#app {
+  max-width: 1280px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: linear-gradient(#fff3d6, #ffe9bd 60%, #ffd9a0);
+  padding: 10px 14px 16px;
+}
+.hidden { display: none !important; }
+
+/* ---- HUD atas ---- */
+#hud {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #8b3a12;
+  color: #fff;
+  border-radius: 14px;
+  padding: 8px 14px;
+  box-shadow: 0 3px 0 #5e2708;
+}
+.brand { font-size: 26px; font-weight: 900; letter-spacing: 1px; white-space: nowrap; }
+.brand span { font-size: 15px; font-weight: 700; color: #ffd166; letter-spacing: 0; }
+.hud-box {
+  background: #a44a1a;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 17px;
+  white-space: nowrap;
+}
+.hud-box small { font-size: 11px; opacity: .8; margin-left: 4px; }
+.hud-box b { font-size: 20px; }
+.hud-box.bad { background: #7c2d12; }
+#timerBox { font-size: 22px; font-weight: 900; }
+#timerBox.low { background: #c1121f; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .55; } }
+#hud button {
+  margin-left: auto;
+  font-size: 20px;
+  background: #ffd166;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+#muteBtn { margin-left: 0; }
+
+#rushBanner {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  background: #c1121f;
+  border-radius: 10px;
+  padding: 6px;
+  animation: blink .7s steps(2) infinite;
+}
+
+/* ---- Panel umum ---- */
+#kitchen section {
+  background: #fffaf0;
+  border: 3px solid #e0a458;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  box-shadow: 0 3px 0 #d18a3d;
+}
+#kitchen h2 { font-size: 18px; margin-bottom: 8px; color: #8b3a12; }
+.hint { font-size: 12px; font-weight: 400; color: #9c6644; }
+
+/* ---- Papan pesanan ---- */
+#orderList { display: flex; gap: 12px; min-height: 118px; }
+.order-ticket {
+  flex: 1;
+  background: #fff;
+  border: 3px solid #d9a441;
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+  position: relative;
+  transition: transform .08s, box-shadow .08s;
+}
+.order-ticket:hover { transform: translateY(-2px); }
+.order-ticket.active { border-color: #e4572e; box-shadow: 0 0 0 3px #ffd166; background: #fff7e0; }
+.order-ticket.urgent { animation: urgentPulse .5s infinite; border-color: #c1121f; }
+@keyframes urgentPulse { 50% { box-shadow: 0 0 0 4px rgba(193, 18, 31, .45); } }
+.order-empty {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  border: 3px dashed #d9a441; border-radius: 12px; color: #b08954; font-size: 15px;
+}
+.ticket-dish { font-size: 19px; font-weight: 900; }
+.ticket-dish .pts { float: right; color: #2a9d8f; font-size: 15px; }
+.ticket-ings { font-size: 22px; margin: 4px 0 6px; letter-spacing: 2px; }
+.patience { height: 12px; background: #eee; border-radius: 6px; overflow: hidden; }
+.patience-fill { height: 100%; background: #2a9d8f; border-radius: 6px; transition: width .2s linear; }
+.patience-fill.warn { background: #e9c46a; }
+.patience-fill.crit { background: #c1121f; }
+.ticket-customer { font-size: 13px; color: #9c6644; margin-top: 4px; }
+
+/* ---- Stasiun dapur ---- */
+#stationsPanel { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 14px; }
+.station-col h2 { font-size: 16px; }
+#pantryGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.pantry-btn {
+  background: #fff;
+  border: 3px solid #c9a06a;
+  border-radius: 12px;
+  padding: 8px 4px 6px;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  transition: transform .08s;
+}
+.pantry-btn:hover { transform: scale(1.04); }
+.pantry-btn .ing-emoji { font-size: 30px; display: block; }
+.pantry-btn .ing-name { font-size: 14px; font-weight: 700; }
+.pantry-btn .ing-station { font-size: 11px; color: #9c6644; }
+.pantry-btn.needed { border-color: #e9c46a; background: #fff3c4; box-shadow: 0 0 0 2px #e9c46a; }
+.pantry-btn.used { opacity: .45; }
+.pantry-btn.wrong { animation: shake .3s; border-color: #c1121f; }
+@keyframes shake { 25% { transform: translateX(-2px); } 75% { transform: translateX(2px); } }
+.station-note { font-size: 12px; color: #9c6644; margin-top: 8px; line-height: 1.4; }
+
+.station {
+  background: #fff;
+  border: 3px solid #c9a06a;
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+.station.busy { border-color: #e4572e; background: #fff0e6; }
+.station-emoji { font-size: 30px; }
+.station-name { font-size: 16px; font-weight: 900; letter-spacing: 1px; }
+.station-item { font-size: 14px; min-height: 20px; margin: 2px 0 6px; }
+.progress { height: 14px; background: #eee; border-radius: 7px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: #e4572e; transition: width .1s linear; }
+.station-hint { font-size: 11px; color: #9c6644; margin-top: 4px; }
+
+/* ---- Piring ---- */
+#plateBox { background: #fff; border: 3px solid #2a9d8f; border-radius: 12px; padding: 10px; text-align: center; }
+#activeDish { font-size: 18px; font-weight: 900; color: #2a6f66; min-height: 24px; }
+#plateSlots { display: flex; justify-content: center; gap: 10px; margin: 10px 0; min-height: 64px; }
+.plate-slot {
+  width: 64px; height: 64px;
+  border: 3px dashed #b7a99a; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 26px; background: #fdf6ec;
+}
+.plate-slot .slot-name { font-size: 9px; color: #9c6644; }
+.plate-slot.waiting { opacity: .75; }
+.plate-slot.processing { border-style: solid; border-color: #e9c46a; animation: pulse 1s infinite; }
+.plate-slot.ready { border-style: solid; border-color: #2a9d8f; background: #dff5f0; }
+@keyframes pulse { 50% { transform: scale(1.07); } }
+#serveBtn {
+  width: 100%;
+  font-size: 22px; font-weight: 900; font-family: inherit;
+  background: #2a9d8f; color: #fff;
+  border: none; border-radius: 12px; padding: 10px;
+  cursor: pointer; box-shadow: 0 3px 0 #1d6a60;
+}
+#serveBtn:disabled { background: #b7a99a; box-shadow: none; cursor: not-allowed; }
+#serveBtn:not(:disabled) { box-shadow: 0 3px 0 #1d6a60, 0 0 0 4px #ffd166; }
+
+/* ---- Resep ---- */
+#recipeList { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.recipe-card {
+  background: #fff;
+  border: 3px solid #d9a441;
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.recipe-card .dish-name { font-size: 17px; font-weight: 900; }
+.recipe-card .dish-pts { float: right; color: #2a9d8f; }
+.recipe-card .dish-ings { font-size: 20px; margin: 4px 0; letter-spacing: 2px; }
+.recipe-card .dish-steps { font-size: 12px; color: #9c6644; line-height: 1.45; }
+
+/* ---- Toast ---- */
+#toast {
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  background: #3a2415; color: #fff;
+  font-size: 22px; font-weight: 900;
+  padding: 8px 22px; border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+  z-index: 40; pointer-events: none;
+}
+#toast.good { background: #2a9d8f; }
+#toast.bad { background: #c1121f; }
+
+/* ---- Overlay ---- */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(43, 29, 18, .82);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 50;
+}
+.overlay-card {
+  background: #fff7e6;
+  border-radius: 20px;
+  border: 4px solid #e0a458;
+  padding: 26px 34px;
+  max-width: 620px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+}
+.overlay-emoji { font-size: 56px; }
+.overlay-card h1 { font-size: 40px; color: #8b3a12; letter-spacing: 2px; }
+.tagline { font-size: 17px; color: #9c6644; margin: 4px 0 14px; }
+.howto { text-align: left; font-size: 16px; line-height: 1.65; margin: 0 0 12px 22px; }
+.shift-info { font-size: 15px; margin-bottom: 16px; }
+.big-btn {
+  font-size: 24px; font-weight: 900; font-family: inherit;
+  background: #e4572e; color: #fff;
+  border: none; border-radius: 14px; padding: 12px 30px;
+  cursor: pointer; box-shadow: 0 4px 0 #a83c17;
+}
+.big-btn:hover { transform: translateY(-2px); }
+.credit { font-size: 12px; color: #b08954; margin-top: 14px; }
+#finalStats { font-size: 19px; line-height: 1.9; margin-bottom: 18px; text-align: left; }
+#finalStats b { float: right; color: #8b3a12; }

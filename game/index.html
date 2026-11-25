@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dapur Kilat — Warung Rush</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <header id="hud">
+    <div class="brand">🍳 DAPUR KILAT <span>Warung Rush</span></div>
+    <div class="hud-box" id="timerBox">⏱️ <span id="timer">02:00</span><small>SHIFT</small></div>
+    <div class="hud-box">⭐ Skor <b id="score">0</b></div>
+    <div class="hud-box">🔥 Kombo <b id="combo">×1</b></div>
+    <div class="hud-box">🍽️ Tersaji <b id="served">0</b></div>
+    <div class="hud-box bad">✖️ Salah <b id="mistakes">0</b></div>
+    <button id="pauseBtn" title="Jeda (P)">⏸️</button>
+    <button id="muteBtn" title="Suara (M)">🔊</button>
+  </header>
+
+  <div id="rushBanner" class="hidden">⚡ RUSH! Pesanan datang lebih cepat! ⚡</div>
+
+  <main id="kitchen">
+    <section id="ordersPanel" aria-label="Papan pesanan">
+      <h2>📋 PAPAN PESANAN <span class="hint">klik tiket untuk memilih hidangan</span></h2>
+      <div id="orderList"></div>
+    </section>
+
+    <section id="stationsPanel" aria-label="Dapur">
+      <div class="station-col">
+        <h2>🥬 PANTRY <span class="hint">klik bahan yang dibutuhkan</span></h2>
+        <div id="pantryGrid"></div>
+        <p class="station-note">Bahan yang <b>dibutuhkan</b> hidangan aktif menyala kuning. Bahan salah = −5 poin.</p>
+      </div>
+
+      <div class="station-col">
+        <h2>🔪 TALENAN &amp; 🍳 WAJAN</h2>
+        <div id="chopStation" class="station" data-station="chop">
+          <div class="station-emoji">🔪</div>
+          <div class="station-name">TALENAN</div>
+          <div class="station-item" id="chopItem">— kosong —</div>
+          <div class="progress"><div class="progress-fill" id="chopFill"></div></div>
+          <div class="station-hint">untuk 🍗🥕🧅</div>
+        </div>
+        <div id="cookStation" class="station" data-station="cook">
+          <div class="station-emoji">🍳</div>
+          <div class="station-name">WAJAN</div>
+          <div class="station-item" id="cookItem">— kosong —</div>
+          <div class="progress"><div class="progress-fill" id="cookFill"></div></div>
+          <div class="station-hint">untuk 🍚🍜🥚</div>
+        </div>
+      </div>
+
+      <div class="station-col">
+        <h2>🍽️ PIRING SAJI</h2>
+        <div id="plateBox">
+          <div id="activeDish">Pilih pesanan dulu!</div>
+          <div id="plateSlots"></div>
+          <button id="serveBtn" disabled>SAJIKAN! ⎵</button>
+          <div class="station-note">Sajikan selagi sabar pelanggan masih penuh untuk bonus kecepatan.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recipesPanel" aria-label="Resep">
+      <h2>📖 RESEP WARUNG <span class="hint">tombol 1–4 memilih pesanan • Spasi menyajikan • P jeda</span></h2>
+      <div id="recipeList"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="hidden"></div>
+
+  <div id="startOverlay" class="overlay">
+    <div class="overlay-card">
+      <div class="overlay-emoji">🍳</div>
+      <h1>DAPUR KILAT</h1>
+      <p class="tagline">Warung Rush — masak cepat, sajikan tepat!</p>
+      <ol class="howto">
+        <li><b>1.</b> Klik tiket pesanan di papan, lalu ambil bahannya dari <b>Pantry</b>.</li>
+        <li><b>2.</b> Bahan mentah diolah di <b>Talenan</b> 🔪 atau <b>Wajan</b> 🍳 — klik stasiun yang tepat.</li>
+        <li><b>3.</b> Kalau semua bahan sudah di <b>Piring</b>, tekan <b>SAJIKAN!</b> sebelum pelanggan kehabisan sabar.</li>
+        <li><b>4.</b> Sajikan beruntun untuk kombo, jangan salah bahan: tiap kesalahan −5 poin.</li>
+      </ol>
+      <p class="shift-info">⏱️ Satu shift = <b>120 detik</b>. Pesanan terakhir 30 detik datang lebih cepat — RUSH!</p>
+      <button id="startBtn" class="big-btn">▶ MULAI MASAK</button>
+      <p class="credit">Game orisinal • tanpa gambar luar • suara dibuat dengan WebAudio</p>
+    </div>
+  </div>
+
+  <div id="endOverlay" class="overlay hidden">
+    <div class="overlay-card">
+      <div class="overlay-emoji">🏆</div>
+      <h1>SHIFT SELESAI!</h1>
+      <p class="tagline">Dapur tutup, pelanggan pulang kenyang.</p>
+      <div id="finalStats"></div>
+      <button id="restartBtn" class="big-btn">↻ MAIN LAGI</button>
+    </div>
+  </div>
+
+  <div id="pauseOverlay" class="overlay hidden">
+    <div class="overlay-card">
+      <div class="overlay-emoji">⏸️</div>
+      <h1>JEDA</h1>
+      <p class="tagline">Wajan menunggu… tekan P atau tombol ▶ untuk lanjut.</p>
+      <button id="resumeBtn" class="big-btn">▶ LANJUT MASAK</button>
+    </div>
+  </div>
+</div>
+
+<script src="src/config.js"></script>
+<script src="src/audio.js"></script>
+<script src="src/state.js"></script>
+<script src="src/render.js"></script>
+<script src="src/input.js"></script>
+<script src="src/shots.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
